@@ -28,3 +28,19 @@ fi
 sudo tar -cf /tmp/$filename /var/log/apache2/
 
 aws s3 cp /tmp/$filename $bucket
+
+size=$(stat -c%s /tmp/$filename)
+
+if [ sudo -f "/var/www/html/inventory.html" ]
+then
+        echo "Creating cat /var/www/html/inventory.html"
+        sudo cat > /var/www/html/inventory.html
+else
+        echo "File Already Exist"
+        sudo echo httpd-logs ' &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'$timestamp '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'tar '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' $size '&nbsp;' >> /var/www/html/inventory.html
+        sudo echo '<br>' >> /var/www/html/inventory.html
+fi
+
+
+sudo cat > /etc/cron.d
+sudo echo '00 08 * * * /bin/sh/ /home/ubuntu/automatin.sh' /etc/cron.d
